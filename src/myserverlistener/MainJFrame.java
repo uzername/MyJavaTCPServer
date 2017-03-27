@@ -43,7 +43,7 @@ public class MainJFrame extends javax.swing.JFrame {
 	c.fill = GridBagConstraints.HORIZONTAL;
 	}
 
-	button = new javax.swing.JButton("Button 1");
+	//button = new javax.swing.JButton("Button 1");
 	if (shouldWeightX) {
 	c.weightx = 0.5;
 	}
