@@ -1,9 +1,14 @@
 package myserverlistener;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 public class MainJFrame extends javax.swing.JFrame {
 
     private java.awt.GridBagConstraints c = new java.awt.GridBagConstraints(); 
     private java.awt.GridBagConstraints c2 = new java.awt.GridBagConstraints(); 
+    final static boolean shouldFill = true;
+    final static boolean shouldWeightX = true;
     /**
      * Creates new form MainJFrame
      */
@@ -25,47 +30,65 @@ public class MainJFrame extends javax.swing.JFrame {
         jEditorPane1 = new javax.swing.JEditorPane();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-
+            java.awt.Container pane = this.getContentPane();
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        //layout.columnWidths = new int[] {400};
-        //layout.rowHeights = new int[] {285, 15};
-        //layout.columnWeights = new double[] {1.0};
-        //layout.rowWeights = new double[] {0.5, 0.5};
-        getContentPane().setLayout(layout);
-
-        //jPanel1.setLayout(new java.awt.FlowLayout());
-        //jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.black));
+            java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
+            pane.setLayout(layout);
         jScrollPane1.setViewportView(jEditorPane1);
-
-        //jPanel1.add(jScrollPane1);
-
-        /*Adding code*/
-        c.gridx=0;
-        c.gridy =0;
-        c.gridwidth=2;
-        c.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.0;
-        c.ipady = 40;
-        //getContentPane().add(jPanel1, c);
-        getContentPane().add(jScrollPane1, c);
-
-        //jPanel2.setMaximumSize(new java.awt.Dimension(2147483647, 15));
-        //jPanel2.setMinimumSize(new java.awt.Dimension(73, 15));
-        //jPanel2.setPreferredSize(new java.awt.Dimension(400, 15));
-        //jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        jButton1.setText("jButton1");
-        //jButton1.setMaximumSize(new java.awt.Dimension(73, 15));
-        //jButton1.setMinimumSize(new java.awt.Dimension(73, 15));
-        //jButton1.setPreferredSize(new java.awt.Dimension(73, 15));
-        jPanel2.add(jButton1);
         
-        c2.gridx=1;
-        c2.gridy=1;
-        c2.gridwidth=1;
-        
-        getContentPane().add(jPanel2, c2);
+        javax.swing.JButton button;
+        GridBagConstraints c = new GridBagConstraints();
+	if (shouldFill) {
+	//natural height, maximum width
+	c.fill = GridBagConstraints.HORIZONTAL;
+	}
+
+	button = new javax.swing.JButton("Button 1");
+	if (shouldWeightX) {
+	c.weightx = 0.5;
+	}
+/*
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.gridx = 0;
+	c.gridy = 0;
+	pane.add(button, c);
+
+	button = new javax.swing.JButton("Button 2");
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.weightx = 0.5;
+	c.gridx = 1;
+	c.gridy = 0;
+	pane.add(button, c);
+
+	button = new javax.swing.JButton("Button 3");
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.weightx = 0.5;
+	c.gridx = 2;
+	c.gridy = 0;
+	pane.add(button, c);
+*/
+	//button = new javax.swing.JButton("Long-Named Button 4");
+	c.fill = GridBagConstraints.BOTH;
+	c.ipady = 40;      //make this component tall
+	c.weightx = 0.9;
+        c.weighty=7.0;
+	c.gridwidth = 3;
+	c.gridx = 0;
+	c.gridy = 1;
+	pane.add(jScrollPane1, c);
+
+	button = new javax.swing.JButton("5");
+	c.fill = GridBagConstraints.NONE;
+	c.ipady = 0;       //reset to default
+	c.weighty = 0.03;   //request no extra vertical space
+	c.anchor = GridBagConstraints.PAGE_END; //bottom of space
+	c.insets = new Insets(1,0,0,0);  //top padding
+	c.gridx = 1;       //aligned with button 2
+	c.gridwidth = 1;   //2 columns wide
+	c.gridy = 2;       //third row
+        c.weightx=0.5;
+	pane.add(button, c);
+
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
