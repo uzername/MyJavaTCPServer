@@ -4,9 +4,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ScrollPaneConstants;
 
 import myserverlistener.multithreadcode.*;
+import myserverlistener.servicepkg.TextAreaHandler;
 
 public class MainJFrame extends javax.swing.JFrame {
 
@@ -31,10 +34,10 @@ public class MainJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        this.setPreferredSize(new java.awt.Dimension(800, 600));
+        this.setPreferredSize(new java.awt.Dimension(640, 480));
         //jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jEditorPane1 = new javax.swing.JTextPane();
         jPanel2 = new javax.swing.JPanel();
 //        jButton1 = new javax.swing.JButton();
             java.awt.Container pane = this.getContentPane();
@@ -109,17 +112,20 @@ public class MainJFrame extends javax.swing.JFrame {
                         Integer inpPort = myDialog.getPortValue();
                         startServerDispatcher(inpPort);
                         usedPort = inpPort;
+                        
                     }
                     
                     
                 } else {
-                    //stopServerDispatcher();
+                   stopServerDispatcher();
                    serverStarted =false;
                    button.setText("Запуск");
                 }
             }
         } );
 
+        configureLogger();
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -149,27 +155,48 @@ public class MainJFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainJFrame().setVisible(true);
             }
         });
+        
+        
+        //java.util.logging.
     }
     
     public void startServerDispatcher(Integer portAddr) {
         //see at the end: http://tutorials.jenkov.com/java-multithreaded-servers/multithreaded-server.html
         serverDispatcher = new MultiThreadedServer(9000);
         new Thread(serverDispatcher).start();
-
+        Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер запущено, порт: "+portAddr.toString());
         serverStarted = true;
         button.setText("Стоп");
     }
     
+    public void stopServerDispatcher() {
+        serverDispatcher.stop();
+        Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер зупинено");
+    }
+    public void configureLogger() {
+        //configure logger. mind jEditorPane1 not null
+        TextAreaHandler textAreaHandler = new TextAreaHandler();
+        textAreaHandler.setTextArea(this.jEditorPane1);
+        Logger.getLogger(MainJFrame.class.getName()).addHandler(textAreaHandler);
+        Logger.getLogger(MultiThreadedServer.class.getName()).addHandler(textAreaHandler);
+        /*
+        Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL");
+        Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL2");
+        Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL3");
+        */
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button;
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JTextPane jEditorPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -6,11 +6,13 @@ import java.net.Socket;
 import java.io.IOException;
 
 public class MultiThreadedServer implements Runnable{
-
+    //protected: члены класса доступны внутри пакета и в наследниках;
     protected int          serverPort   = 8080;
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
+    
+    private  myserverlistener.clientprocessing.MyClientMsgHandler clientHandler;
 
     public MultiThreadedServer(int port){
         this.serverPort = port;
