@@ -9,10 +9,14 @@ package myserverlistener;
 
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class NetworkCode {
+public class NetworkCode extends Thread {
     private Integer portNumber;
-
+    private Boolean keepListening;
     private ServerSocket serverSocket;
     private Socket clientSocket;
     //read data from socket
@@ -23,12 +27,55 @@ public class NetworkCode {
     public Integer getPortNumber() {
         return portNumber;
     }
-
     /**
      * @param portNumber the portNumber to set
      */
     public void setPortNumber(Integer portNumber) {
         this.portNumber = portNumber;
+    }
+    
+    
+    public void initConnection() throws IOException {
+        
+             this.serverSocket = new ServerSocket(this.portNumber);
+             this.clientSocket = serverSocket.accept();
+             //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);                   
+             in = new BufferedReader(
+                new InputStreamReader(clientSocket.getInputStream()) );
+            //Logger.getLogger(NetworkCode.class.getName()).log(Level.SEVERE, null, ex);
+            keepListening = true;
+    }
+    
+    @Override
+    public void run() {
+        char[] cbuf = null;
+        while (keepListening) {
+            try {                
+                in.read(cbuf);
+                this.processBuffer(cbuf);
+            } catch (IOException ex) {
+                Logger.getLogger(NetworkCode.class.getName()).log(Level.SEVERE, null, ex);
+                keepListening = false;
+            }
+        }
+    }
+
+    /**
+     * @return the keepListening
+     */
+    public Boolean getKeepListening() {
+        return keepListening;
+    }
+
+    /**
+     * @param keepListening the keepListening to set
+     */
+    public void setKeepListening(Boolean keepListening) {
+        this.keepListening = keepListening;
+    }
+    
+    private void processBuffer(char[] cbuf) {
+        Logger.getLogger(NetworkCode.class.getName()).log( Level.INFO, String.valueOf(cbuf) );
     }
     
 }

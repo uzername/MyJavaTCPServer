@@ -2,6 +2,11 @@ package myserverlistener;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ScrollPaneConstants;
+
+import myserverlistener.multithreadcode.*;
 
 public class MainJFrame extends javax.swing.JFrame {
 
@@ -26,19 +31,20 @@ public class MainJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        this.setPreferredSize(new java.awt.Dimension(800, 600));
         //jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+//        jButton1 = new javax.swing.JButton();
             java.awt.Container pane = this.getContentPane();
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
             pane.setLayout(layout);
         jScrollPane1.setViewportView(jEditorPane1);
+        jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
-        javax.swing.JButton button;
+        //javax.swing.JButton button;
         GridBagConstraints c = new GridBagConstraints();
 	if (shouldFill) {
 	//natural height, maximum width
@@ -78,8 +84,8 @@ public class MainJFrame extends javax.swing.JFrame {
 	c.gridx = 0;
 	c.gridy = 1;
 	pane.add(jScrollPane1, c);
-
-	button = new javax.swing.JButton("5");
+        //connect-disconnect button
+	button = new javax.swing.JButton("Запуск");
 	c.fill = GridBagConstraints.NONE;
 	c.ipady = 0;       //reset to default
 	c.weighty = 0.03;   //request no extra vertical space
@@ -90,7 +96,29 @@ public class MainJFrame extends javax.swing.JFrame {
 	c.gridy = 2;       //third row
         c.weightx=0.5;
 	pane.add(button, c);
-
+        
+        javax.swing.JFrame piercingClosure = this;
+        button.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (serverStarted == false) {
+                    //show dialog with port selection
+                    CustomDialog myDialog = new CustomDialog(piercingClosure, true, "Порт", usedPort);
+                    if (myDialog.getAnswer()) {
+                        //start server with provided port
+                        Integer inpPort = myDialog.getPortValue();
+                        startServerDispatcher(inpPort);
+                        usedPort = inpPort;
+                    }
+                    
+                    
+                } else {
+                    //stopServerDispatcher();
+                   serverStarted =false;
+                   button.setText("Запуск");
+                }
+            }
+        } );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -129,12 +157,24 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void startServerDispatcher(Integer portAddr) {
+        //see at the end: http://tutorials.jenkov.com/java-multithreaded-servers/multithreaded-server.html
+        serverDispatcher = new MultiThreadedServer(9000);
+        new Thread(serverDispatcher).start();
 
+        serverStarted = true;
+        button.setText("Стоп");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton button;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+    private Integer usedPort = 9000;
+    private Boolean serverStarted = false;
+    MultiThreadedServer serverDispatcher;
 }
