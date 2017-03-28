@@ -188,6 +188,7 @@ public class MainJFrame extends javax.swing.JFrame {
         textAreaHandler.setTextArea(this.jEditorPane1);
         Logger.getLogger(MainJFrame.class.getName()).addHandler(textAreaHandler);
         Logger.getLogger(MultiThreadedServer.class.getName()).addHandler(textAreaHandler);
+        Logger.getLogger(WorkerRunnable.class.getName()).addHandler(textAreaHandler);
         /*
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL");
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL2");
