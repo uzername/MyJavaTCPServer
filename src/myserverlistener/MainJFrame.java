@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
@@ -15,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import myserverlistener.clientnetworkcode.TraditionalClient;
 
 import myserverlistener.multithreadcode.*;
 import myserverlistener.servicepkg.TextAreaHandler;
@@ -164,6 +166,7 @@ public class MainJFrame extends javax.swing.JFrame {
         sendToPanel.add(internalMsgParam, BorderLayout.NORTH);
         tabbedPane.addTab("N2", pane2); 
         
+        this.setTitle(HEADER_NOMODE);
         
         javax.swing.JFrame piercingClosure = this;
         button.addActionListener( new ActionListener() {
@@ -190,7 +193,38 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
             }
         } );
-
+        
+        sendMsgButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (serverStarted) {
+                   stopServerDispatcher();
+                }
+                //start client
+                clientDispatcher = new TraditionalClient();
+                try {
+                    clientDispatcher.initSocket(hostLine.getText(), ((Integer) portLine.getValue()).intValue() );
+                } catch (Exception exc2) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при запуску клієнта: "+exc2.getMessage());
+                }
+                try {
+                    //start client. Might be better to make it multithreaded
+                    String msg2Send =  "";
+                    //multithreading hack to stop it from hanging: http://stackoverflow.com/a/2275596
+                    //might be unnecessary because socket might have a timeout
+                   String retLine = clientDispatcher.writeMessage(msg2Send);
+                } catch (Exception exc3) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при відправці повідомлення клієнтом: "+exc3.getMessage());
+                }
+                //stop client
+                try {
+                    clientDispatcher.closeSocket();
+                } catch (Exception exc4) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при завершенні клієнта: "+exc4.getMessage());
+                }
+            }
+        } );
+        
         configureLogger();
         
         pack();
@@ -245,12 +279,14 @@ public class MainJFrame extends javax.swing.JFrame {
             Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Виникла проблема при запуску сервера: "+e.getMessage());
             serverStarted = false;
             button.setText("Запуск");
+            this.setTitle(HEADER_NOMODE);
             return;
         }
         
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер запущено, порт: "+portAddr.toString());
         serverStarted = true;
         button.setText("Стоп");
+        this.setTitle(HEADER_SERVER_START_CLIENT_STOP);
     }
     
     public void stopServerDispatcher() {
@@ -261,6 +297,7 @@ public class MainJFrame extends javax.swing.JFrame {
         } finally {
             serverStarted =false;
             button.setText("Запуск"); 
+            this.setTitle(HEADER_NOMODE);
         }
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер зупинено");
     }
@@ -301,5 +338,11 @@ public class MainJFrame extends javax.swing.JFrame {
     private Integer usedPort = 9000;
     private Boolean serverStarted = false;
     MultiThreadedServer serverDispatcher;
+    TraditionalClient clientDispatcher;
+    
+    private static final String HEADER_NOMODE = "^_^";
+    private static final String HEADER_SERVER_START_CLIENT_STOP = "Server";
+    private static final String HEADER_SERVER_STOP_CLIENT_START = "Client";
     
 }
+
