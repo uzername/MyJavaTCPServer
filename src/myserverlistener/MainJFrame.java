@@ -118,8 +118,10 @@ public class MainJFrame extends javax.swing.JFrame {
                     
                 } else {
                    stopServerDispatcher();
+                   /*
                    serverStarted =false;
                    button.setText("Запуск");
+                   */
                 }
             }
         } );
@@ -171,15 +173,30 @@ public class MainJFrame extends javax.swing.JFrame {
     
     public void startServerDispatcher(Integer portAddr) {
         //see at the end: http://tutorials.jenkov.com/java-multithreaded-servers/multithreaded-server.html
-        serverDispatcher = new MultiThreadedServer(portAddr);
-        new Thread(serverDispatcher).start();
+        try {
+            serverDispatcher = new MultiThreadedServer(portAddr);
+            new Thread(serverDispatcher).start();
+        } catch (Exception e) {
+            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Виникла проблема при запуску сервера: "+e.getMessage());
+            serverStarted = false;
+            button.setText("Запуск");
+            return;
+        }
+        
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер запущено, порт: "+portAddr.toString());
         serverStarted = true;
         button.setText("Стоп");
     }
     
     public void stopServerDispatcher() {
-        serverDispatcher.stop();
+        try {
+            serverDispatcher.stop();
+        } catch (Exception e) {
+            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Виникла проблема при зупинці сервера: "+e.getMessage());
+        } finally {
+            serverStarted =false;
+            button.setText("Запуск"); 
+        }
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер зупинено");
     }
     public void configureLogger() {
