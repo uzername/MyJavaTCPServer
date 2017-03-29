@@ -35,13 +35,16 @@ time +
 "").getBytes());
             //probably reading is done from clientSocket inputStream
             
-            String clientLine; 
-            Object[] allLines = in_reader.lines().toArray();
-            clientLine = "";
-            for (Object singleLine : allLines) {
-                clientLine+=(String)singleLine;
+            String clientLine; String completeLine=""; 
+            clientLine = "";            
+            while ((clientLine = in_reader.readLine()) != null) {
+                if (clientLine.isEmpty()||clientLine.equals("")) {
+                    break;
+                } 
+                completeLine += "\n"+clientLine;
             }
             
+            in_reader.close();
             // http://stackoverflow.com/questions/28977308/read-all-lines-with-bufferedreader
             output.close();
             input.close();
@@ -51,7 +54,7 @@ time +
                                                             //+"\n"+"Data from client: "
                                                             //+String.valueOf(b)+"\n"+"Client line length: "+String.valueOf(numRead)
                                                             );
-            //Logger.getLogger( this.getClass().getName() ).log(Level.INFO, clientLine);
+            Logger.getLogger( this.getClass().getName() ).log(Level.INFO, completeLine);
         } catch (IOException e) {
             //report exception somewhere.
             e.printStackTrace();
