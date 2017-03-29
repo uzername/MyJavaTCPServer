@@ -1,11 +1,19 @@
 package myserverlistener;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import myserverlistener.multithreadcode.*;
@@ -39,11 +47,19 @@ public class MainJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JTextPane();
         jPanel2 = new javax.swing.JPanel();
+        
+        tabbedPane = new JTabbedPane();
 //        jButton1 = new javax.swing.JButton();
-            java.awt.Container pane = this.getContentPane();
+            java.awt.Container generalPane = this.getContentPane();
+            java.awt.Container pane = new JPanel();
+            
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
             pane.setLayout(layout);
+            
+            generalPane.setLayout(new BorderLayout());
+            generalPane.add(tabbedPane, BorderLayout.CENTER);
+            tabbedPane.addTab("N1", pane);
         jScrollPane1.setViewportView(jEditorPane1);
         jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jEditorPane1.setEditable(false);
@@ -58,26 +74,7 @@ public class MainJFrame extends javax.swing.JFrame {
 	if (shouldWeightX) {
 	c.weightx = 0.5;
 	}
-/*
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.gridx = 0;
-	c.gridy = 0;
-	pane.add(button, c);
 
-	button = new javax.swing.JButton("Button 2");
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.weightx = 0.5;
-	c.gridx = 1;
-	c.gridy = 0;
-	pane.add(button, c);
-
-	button = new javax.swing.JButton("Button 3");
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.weightx = 0.5;
-	c.gridx = 2;
-	c.gridy = 0;
-	pane.add(button, c);
-*/
 	//button = new javax.swing.JButton("Long-Named Button 4");
 	c.fill = GridBagConstraints.BOTH;
 	c.ipady = 40;      //make this component tall
@@ -99,6 +96,74 @@ public class MainJFrame extends javax.swing.JFrame {
 	c.gridy = 2;       //third row
         c.weightx=0.5;
 	pane.add(button, c);
+        
+        java.awt.Container pane2 = new JPanel();
+        
+        java.awt.GridBagLayout layout2 = new java.awt.GridBagLayout();
+        layout2.rowWeights = new double[] {0.90,0.10};
+        layout2.columnWeights = new double[] {0.75, 0.25};
+        pane2.setLayout(layout2);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jEditorPane2 = new javax.swing.JTextPane();
+        jScrollPane2.setViewportView(jEditorPane2);
+        jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jEditorPane2.setEditable(true);
+        sendToPanel = new JPanel();
+        sendToPanel.setBorder(javax.swing.BorderFactory.createTitledBorder( javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLUE), "Отримувач") ); 
+        sendToPanel.setLayout(new BorderLayout());
+        
+        sendMsgButton = new javax.swing.JButton("Відправить");
+        
+        GridBagConstraints c22 = new GridBagConstraints();
+        c22.fill = GridBagConstraints.BOTH;
+	c22.ipady = 40;      //make this component tall
+        c22.weighty=7.0;
+	c22.gridwidth = 1;
+	c22.gridx = 0;
+	c22.gridy = 0;
+	pane2.add(jScrollPane2, c22);
+        c22.gridx=1; c2.gridy = 0;
+        c22.gridwidth = 1;
+        pane2.add(sendToPanel, c22);
+        c22.gridx=0;
+        c22.gridy=1;
+        c22.weighty=0;
+        c22.ipady=0;
+        c22.fill=GridBagConstraints.NONE;
+        c22.anchor = GridBagConstraints.LINE_START;
+        pane2.add(sendMsgButton, c22);
+        
+        java.awt.Container internalMsgParam = new JPanel();
+        GridBagLayout layout3 = new GridBagLayout();
+        internalMsgParam.setLayout(layout3);
+        GridBagConstraints c3 = new GridBagConstraints();
+        portLabel = new JLabel("Порт");
+        hostLabel = new JLabel("Хост");
+        hostLine = new JTextField();
+        
+        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        format.setGroupingUsed(false);
+        javax.swing.text.NumberFormatter formatter = new javax.swing.text.NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(10); //who would set port less than 10? way too risky...
+        formatter.setMaximum(65535);
+        formatter.setAllowsInvalid(false);
+        // If you want the value to be committed on each keystroke instead of focus lost
+        formatter.setCommitsOnValidEdit(true);
+        portLine = new JFormattedTextField(formatter);
+        portLine.setValue(80); 
+        
+        c3.gridx = 0; c3.gridy=0; c3.fill =GridBagConstraints.NONE; c3.weightx = 0.0;
+        internalMsgParam.add(hostLabel, c3);
+        c3.gridx = 1; c3.gridy=0; c3.fill =GridBagConstraints.HORIZONTAL; c3.weightx = 1.0;
+        internalMsgParam.add(hostLine, c3);
+        c3.gridx = 0; c3.gridy=1; c3.fill =GridBagConstraints.NONE; c3.weightx = 0.0;
+        internalMsgParam.add(portLabel, c3); 
+        c3.gridx = 1; c3.gridy=1;  c3.fill =GridBagConstraints.HORIZONTAL; c3.weightx = 1.0;
+        internalMsgParam.add(portLine, c3);
+        sendToPanel.add(internalMsgParam, BorderLayout.NORTH);
+        tabbedPane.addTab("N2", pane2); 
+        
         
         javax.swing.JFrame piercingClosure = this;
         button.addActionListener( new ActionListener() {
@@ -218,8 +283,23 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    
+    private JTabbedPane tabbedPane;
+    public javax.swing.JTextPane jEditorPane2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private JPanel sendToPanel;
+    private javax.swing.JButton sendMsgButton;
+    
+    private javax.swing.JTextField hostLine;
+    private javax.swing.JLabel hostLabel;
+    private javax.swing.JLabel portLabel;
+    private javax.swing.JFormattedTextField portLine;
+    
+    
+    
     // End of variables declaration//GEN-END:variables
     private Integer usedPort = 9000;
     private Boolean serverStarted = false;
     MultiThreadedServer serverDispatcher;
+    
 }
