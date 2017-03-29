@@ -171,7 +171,7 @@ public class MainJFrame extends javax.swing.JFrame {
     
     public void startServerDispatcher(Integer portAddr) {
         //see at the end: http://tutorials.jenkov.com/java-multithreaded-servers/multithreaded-server.html
-        serverDispatcher = new MultiThreadedServer(9000);
+        serverDispatcher = new MultiThreadedServer(portAddr);
         new Thread(serverDispatcher).start();
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер запущено, порт: "+portAddr.toString());
         serverStarted = true;
