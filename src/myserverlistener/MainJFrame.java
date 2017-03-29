@@ -46,7 +46,7 @@ public class MainJFrame extends javax.swing.JFrame {
             pane.setLayout(layout);
         jScrollPane1.setViewportView(jEditorPane1);
         jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        
+        jEditorPane1.setEditable(false);
         //javax.swing.JButton button;
         GridBagConstraints c = new GridBagConstraints();
 	if (shouldFill) {

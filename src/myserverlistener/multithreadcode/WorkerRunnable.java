@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import myserverlistener.clientprocessing.QueryContext;
 
 /**
  *
@@ -28,13 +29,9 @@ public class WorkerRunnable implements Runnable{
             InputStream input  = clientSocket.getInputStream();
             BufferedReader in_reader = new BufferedReader(new InputStreamReader( input ));
             OutputStream output = clientSocket.getOutputStream();
-            long time = System.currentTimeMillis();
-            output.write(("HTTP/1.1 200 OK\n\nWorkerRunnable: " +
-this.serverText + " - " +
-time +
-"").getBytes());
-            //probably reading is done from clientSocket inputStream
             
+            //probably reading is done from clientSocket inputStream
+            // http://stackoverflow.com/questions/28977308/read-all-lines-with-bufferedreader
             String clientLine; String completeLine=""; 
             clientLine = "";            
             while ((clientLine = in_reader.readLine()) != null) {
@@ -44,8 +41,16 @@ time +
                 completeLine += "\n"+clientLine;
             }
             
+            long time = System.currentTimeMillis();
+            QueryContext myContext = new QueryContext();
+            myContext.SrvrText = this.serverText;
+            myContext.time = time;
+            String resultLine = myserverlistener.clientprocessing.MyClientMsgHandler.processQuery(completeLine, myContext);
+            output.write(( resultLine ).getBytes());
+            
+            
             in_reader.close();
-            // http://stackoverflow.com/questions/28977308/read-all-lines-with-bufferedreader
+            
             output.close();
             input.close();
             System.out.println("Request processed: " + time);
