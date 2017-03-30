@@ -42,7 +42,7 @@ public class MainJFrame extends javax.swing.JFrame {
      * JOVAN SAYS: disregard that, better do it by hand
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated and edited Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         this.setPreferredSize(new java.awt.Dimension(640, 480));
         //jPanel1 = new javax.swing.JPanel();
@@ -53,7 +53,7 @@ public class MainJFrame extends javax.swing.JFrame {
         tabbedPane = new JTabbedPane();
 //        jButton1 = new javax.swing.JButton();
             java.awt.Container generalPane = this.getContentPane();
-            java.awt.Container pane = new JPanel();
+            javax.swing.JPanel pane = new JPanel();
             
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
             java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
@@ -99,17 +99,18 @@ public class MainJFrame extends javax.swing.JFrame {
         c.weightx=0.5;
 	pane.add(button, c);
         
-        java.awt.Container pane2 = new JPanel();
-        
+        javax.swing.JPanel pane2 = new JPanel();        
         java.awt.GridBagLayout layout2 = new java.awt.GridBagLayout();
         layout2.rowWeights = new double[] {0.90,0.10};
         layout2.columnWeights = new double[] {0.75, 0.25};
         pane2.setLayout(layout2);
+        
         jScrollPane2 = new javax.swing.JScrollPane();
         jEditorPane2 = new javax.swing.JTextPane();
         jScrollPane2.setViewportView(jEditorPane2);
         jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jEditorPane2.setEditable(true);
+        
         sendToPanel = new JPanel();
         sendToPanel.setBorder(javax.swing.BorderFactory.createTitledBorder( javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLUE), "Отримувач") ); 
         sendToPanel.setLayout(new BorderLayout());
@@ -117,6 +118,7 @@ public class MainJFrame extends javax.swing.JFrame {
         sendMsgButton = new javax.swing.JButton("Відправить");
         
         GridBagConstraints c22 = new GridBagConstraints();
+        
         c22.fill = GridBagConstraints.BOTH;
 	c22.ipady = 40;      //make this component tall
         c22.weighty=7.0;
@@ -124,6 +126,7 @@ public class MainJFrame extends javax.swing.JFrame {
 	c22.gridx = 0;
 	c22.gridy = 0;
 	pane2.add(jScrollPane2, c22);
+        
         c22.gridx=1; c2.gridy = 0;
         c22.gridwidth = 1;
         pane2.add(sendToPanel, c22);
@@ -135,37 +138,49 @@ public class MainJFrame extends javax.swing.JFrame {
         c22.anchor = GridBagConstraints.LINE_START;
         pane2.add(sendMsgButton, c22);
         
-        java.awt.Container internalMsgParam = new JPanel();
+        javax.swing.JPanel internalMsgParam = new JPanel();
         GridBagLayout layout3 = new GridBagLayout();
         internalMsgParam.setLayout(layout3);
+        /*
+            
+        DecimalFormat formatPort = (DecimalFormat) DecimalFormat.getInstance();
+        formatPort.setGroupingUsed(false);
+        javax.swing.text.NumberFormatter formatterPort = new javax.swing.text.NumberFormatter(format);
+        formatterPort.setValueClass(Integer.class);
+        formatterPort.setMinimum(10); //who would set port less than 10? way too risky...
+        formatterPort.setMaximum(65535);
+        formatterPort.setAllowsInvalid(false);
+        // If you want the value to be committed on each keystroke instead of focus lost
+        formatterPort.setCommitsOnValidEdit(true);
+        */
+        
         GridBagConstraints c3 = new GridBagConstraints();
         portLabel = new JLabel("Порт");
         hostLabel = new JLabel("Хост");
-        hostLine = new JTextField();
         
-        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-        format.setGroupingUsed(false);
-        javax.swing.text.NumberFormatter formatter = new javax.swing.text.NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(10); //who would set port less than 10? way too risky...
-        formatter.setMaximum(65535);
-        formatter.setAllowsInvalid(false);
-        // If you want the value to be committed on each keystroke instead of focus lost
-        formatter.setCommitsOnValidEdit(true);
-        portLine = new JFormattedTextField(formatter);
-        portLine.setValue(80); 
-        
+        /*
+        hostLine = new JTextField();    
+        portLine = new JFormattedTextField(formatterPort);
+        portLine.setValue(80);         
+        */
         c3.gridx = 0; c3.gridy=0; c3.fill =GridBagConstraints.NONE; c3.weightx = 0.0;
         internalMsgParam.add(hostLabel, c3);
-        c3.gridx = 1; c3.gridy=0; c3.fill =GridBagConstraints.HORIZONTAL; c3.weightx = 1.0;
-        internalMsgParam.add(hostLine, c3);
         c3.gridx = 0; c3.gridy=1; c3.fill =GridBagConstraints.NONE; c3.weightx = 0.0;
         internalMsgParam.add(portLabel, c3); 
+        /*
+        c3.gridx = 1; c3.gridy=0; c3.fill =GridBagConstraints.HORIZONTAL; c3.weightx = 1.0;
+        internalMsgParam.add(hostLine, c3);
         c3.gridx = 1; c3.gridy=1;  c3.fill =GridBagConstraints.HORIZONTAL; c3.weightx = 1.0;
         internalMsgParam.add(portLine, c3);
+        */
         sendToPanel.add(internalMsgParam, BorderLayout.NORTH);
+        
         tabbedPane.addTab("N2", pane2); 
         
+            //ATTENTION! WEIRD BUG! WHEN SWITCHING TABS, TEXT WOULD NOT BE ADDED TO jEditorPane1
+            //possible solutions: disable tab; reupdate tab upon switching
+            //surprisingly but the problem is because of another iface element. 
+            //Its because of TextField elements on 2nd tab! Absolutely weird!
         this.setTitle(HEADER_NOMODE);
         
         javax.swing.JFrame piercingClosure = this;
@@ -193,38 +208,14 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
             }
         } );
-        
+        /*
         sendMsgButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (serverStarted) {
-                   stopServerDispatcher();
-                }
-                //start client
-                clientDispatcher = new TraditionalClient();
-                try {
-                    clientDispatcher.initSocket(hostLine.getText(), ((Integer) portLine.getValue()).intValue() );
-                } catch (Exception exc2) {
-                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при запуску клієнта: "+exc2.getMessage());
-                }
-                try {
-                    //start client. Might be better to make it multithreaded
-                    String msg2Send =  "";
-                    //multithreading hack to stop it from hanging: http://stackoverflow.com/a/2275596
-                    //might be unnecessary because socket might have a timeout
-                   String retLine = clientDispatcher.writeMessage(msg2Send);
-                } catch (Exception exc3) {
-                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при відправці повідомлення клієнтом: "+exc3.getMessage());
-                }
-                //stop client
-                try {
-                    clientDispatcher.closeSocket();
-                } catch (Exception exc4) {
-                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при завершенні клієнта: "+exc4.getMessage());
-                }
+                processClientRequest();
             }
         } );
-        
+        */
         configureLogger();
         
         pack();
@@ -314,6 +305,36 @@ public class MainJFrame extends javax.swing.JFrame {
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO,  "ROLL3");
         */
     }
+    
+    public void processClientRequest() {
+                if (serverStarted) {
+                   stopServerDispatcher();
+                }
+                //start client
+                clientDispatcher = new TraditionalClient();
+                try {
+                    clientDispatcher.initSocket(hostLine.getText(), ((Integer) portLine.getValue()).intValue() );
+                } catch (Exception exc2) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при запуску клієнта: "+exc2.getMessage());
+                }
+                try {
+                    //start client. Might be better to make it multithreaded
+                    String msg2Send =  "";
+                    //multithreading hack to stop it from hanging: http://stackoverflow.com/a/2275596
+                    //might be unnecessary because socket might have a timeout
+                   String retLine = clientDispatcher.writeMessage(msg2Send);
+                } catch (Exception exc3) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при відправці повідомлення клієнтом: "+exc3.getMessage());
+                }
+                //stop client
+                try {
+                    clientDispatcher.closeSocket();
+                } catch (Exception exc4) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, "Проблема при завершенні клієнта: "+exc4.getMessage());
+                }
+    
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button;
     private javax.swing.JTextPane jEditorPane1;
