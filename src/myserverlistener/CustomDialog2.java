@@ -22,7 +22,7 @@ import javax.swing.InputVerifier;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 
-public class CustomDialog extends JDialog implements ActionListener {
+public class CustomDialog2 extends JDialog implements ActionListener {
     private JPanel upperPanel = null;
     private JPanel myPanel = null;
     private JButton yesButton = null;
@@ -31,10 +31,11 @@ public class CustomDialog extends JDialog implements ActionListener {
     
     private boolean answer = false;
     private Integer portValue;
+    private JTextField hostField;
     
     public boolean getAnswer() { return answer; }
 
-    public CustomDialog(JFrame frame, boolean modal, String myMessage, Integer setPort) {
+    public CustomDialog2(JFrame frame, boolean modal, String myMessage, String myMessage2, Integer setPort, String setHost) {
         super(frame, modal);
         this.setResizable(false);
         upperPanel = new JPanel();                
@@ -53,6 +54,7 @@ public class CustomDialog extends JDialog implements ActionListener {
         portField = new JFormattedTextField(formatter);
         portField.setValue(setPort);
         
+        
         upperPanel.setLayout(new BorderLayout());
         upperPanel.add(portField, BorderLayout.CENTER);
         JLabel msg = new JLabel(myMessage);
@@ -61,6 +63,12 @@ public class CustomDialog extends JDialog implements ActionListener {
         msg.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
         getContentPane().add(upperPanel);
         
+        JLabel hostMsg = new JLabel(myMessage2);
+        getContentPane().add(hostMsg);
+        hostMsg.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+        hostField = new JTextField(setHost);
+        //lowPanel2 = new JPanel(new BorderLayout());
+        //lowPanel2.add
         
         myPanel = new JPanel();
         getContentPane().add(myPanel);
@@ -85,7 +93,7 @@ public class CustomDialog extends JDialog implements ActionListener {
             try {
                 portValue = decimalFormat.parse(portField.getText() ).intValue();
             } catch (ParseException ex) {
-                Logger.getLogger(CustomDialog.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CustomDialog2.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             }
             setVisible(false);
