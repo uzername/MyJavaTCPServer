@@ -19,7 +19,7 @@ public class MyClientMsgHandler {
      String resultLine="";
      QueryContext requiredData = (QueryContext) contextProcessing;
                 Date date = new Date(requiredData.time);
-                DateFormat formatter = new SimpleDateFormat("dd/MMMM/YY HH:mm:ss:SSS");
+                DateFormat formatter = new SimpleDateFormat("dd/MM/YY HH:mm:ss:SSS");
                 String dateFormatted = formatter.format(date);
                 resultLine = "HTTP/1.1 200 OK\n\nWorkerRunnable: " + requiredData.SrvrText+ " - " + dateFormatted + "";
      return resultLine;

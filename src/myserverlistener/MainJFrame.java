@@ -27,6 +27,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private java.awt.GridBagConstraints c2 = new java.awt.GridBagConstraints(); 
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
+    
     /**
      * Creates new form MainJFrame
      */
@@ -88,6 +89,10 @@ public class MainJFrame extends javax.swing.JFrame {
 	pane.add(jScrollPane1, c);
         //connect-disconnect button
 	button = new javax.swing.JButton("Запуск");
+        buttonClear = new javax.swing.JButton("Прибрать всі записи");
+        javax.swing.JPanel btnPannel = new JPanel();
+        btnPannel.add(button); btnPannel.add(buttonClear);
+        
 	c.fill = GridBagConstraints.NONE;
 	c.ipady = 0;       //reset to default
 	c.weighty = 0.03;   //request no extra vertical space
@@ -97,7 +102,10 @@ public class MainJFrame extends javax.swing.JFrame {
 	c.gridwidth = 1;   //2 columns wide
 	c.gridy = 2;       //third row
         c.weightx=0.5;
-	pane.add(button, c);
+	//pane.add(button, c);
+        pane.add(btnPannel, c);
+        
+        
         
         javax.swing.JPanel pane2 = new JPanel();        
         java.awt.GridBagLayout layout2 = new java.awt.GridBagLayout();
@@ -208,6 +216,15 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
             }
         } );
+        buttonClear.addActionListener(
+                new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    jEditorPane1.setText("");
+                }
+            }
+        );
+        
         /*
         sendMsgButton.addActionListener( new ActionListener() {
             @Override
@@ -277,7 +294,7 @@ public class MainJFrame extends javax.swing.JFrame {
         Logger.getLogger(MainJFrame.class.getName()).log(Level.INFO, "Сервер запущено, порт: "+portAddr.toString());
         serverStarted = true;
         button.setText("Стоп");
-        this.setTitle(HEADER_SERVER_START_CLIENT_STOP);
+        this.setTitle(HEADER_SERVER_START_CLIENT_STOP.concat(" : ").concat( portAddr.toString() ));
     }
     
     public void stopServerDispatcher() {
@@ -337,6 +354,8 @@ public class MainJFrame extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button;
+    private javax.swing.JButton buttonClear;
+    
     private javax.swing.JTextPane jEditorPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

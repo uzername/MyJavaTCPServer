@@ -36,7 +36,7 @@ public class TextAreaHandler extends java.util.logging.StreamHandler {
                 */
                 
                 Date date = new Date(record.getMillis());
-                DateFormat formatter = new SimpleDateFormat("dd/MMMM/YY HH:mm:ss:SSS");
+                DateFormat formatter = new SimpleDateFormat("dd/MM/YY HH:mm:ss:SSS");
                 String dateFormatted = formatter.format(date);
                 
                 out.printf("[%s] [%s]: -> %s \n", record.getLevel(),

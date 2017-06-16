@@ -28,7 +28,8 @@ public class MultiThreadedServer implements Runnable{
         while(! isStopped()){
             Socket clientSocket = null;
             try {
-                clientSocket = this.serverSocket.accept();
+                clientSocket = this.serverSocket.accept();                
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, (new StringBuilder("CLIENT CONNECTION ACCEPTED:").append(clientSocket.getLocalAddress().getHostAddress())).toString() );
             } catch (IOException e) {
                 if(isStopped()) {
                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Сервер зупинено; прийом повідомлень від клієнта не відбувається.");
