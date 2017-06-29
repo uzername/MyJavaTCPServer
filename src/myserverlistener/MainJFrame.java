@@ -21,6 +21,8 @@ import myserverlistener.clientnetworkcode.TraditionalClient;
 import myserverlistener.multithreadcode.*;
 import myserverlistener.servicepkg.TextAreaHandler;
 
+import myserverlistener.Globale;
+
 public class MainJFrame extends javax.swing.JFrame {
 
     private java.awt.GridBagConstraints c = new java.awt.GridBagConstraints(); 
@@ -32,6 +34,9 @@ public class MainJFrame extends javax.swing.JFrame {
      * Creates new form MainJFrame
      */
     public MainJFrame() {
+        // 280617 begin
+        Globale.LoggingUsed.set(false);
+        // 280617 end
         initComponents();
     }
 
@@ -281,6 +286,9 @@ public class MainJFrame extends javax.swing.JFrame {
     public void startServerDispatcher(Integer portAddr) {
         //see at the end: http://tutorials.jenkov.com/java-multithreaded-servers/multithreaded-server.html
         try {
+            // 280617 begin
+                //here might be some problems with multithreaded code: race conditions on Logger invocations
+            // 280617 end
             serverDispatcher = new MultiThreadedServer(portAddr);
             new Thread(serverDispatcher).start();
         } catch (Exception e) {

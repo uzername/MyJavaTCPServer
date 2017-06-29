@@ -15,7 +15,10 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
-
+// 280617 begin 
+import myserverlistener.Globale;
+// 280617 end
+        
 public class TextAreaHandler extends java.util.logging.StreamHandler {
 
     private JTextPane textArea;
@@ -26,6 +29,12 @@ public class TextAreaHandler extends java.util.logging.StreamHandler {
 
             @Override
             public void run() {
+                // 280617 begin
+                    //do nothing while this global variable is busy
+                    while (Globale.LoggingUsed.get() == true) { ; }
+                    Globale.LoggingUsed.set(true);
+                // 280617 end
+                        
                 StringWriter text = new StringWriter();
                 PrintWriter out = new PrintWriter(text);
                 //out.println(textArea.getText());
@@ -44,10 +53,14 @@ public class TextAreaHandler extends java.util.logging.StreamHandler {
                 //easily add text: http://stackoverflow.com/a/4059365
                 //StyledDocument doc = myserverlistener.MainJFrame.jEditorPane1.getStyledDocument();
                 StyledDocument doc = textArea.getStyledDocument();
+                System.out.println("Before INSERT");
                 try { 
-                    doc.insertString(doc.getLength(), text.toString(), null);
+                    doc.insertString(doc.getLength(), text.toString() , null);
+                    System.out.println("INSERTED!");
+                    Globale.LoggingUsed.set(false);
                 } catch (BadLocationException ex) {
                     System.out.println("exception in TextAreaHandler!");
+                    Globale.LoggingUsed.set(false);
                 }
             }
 
